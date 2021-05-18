@@ -1,0 +1,22 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © DominicHoang
+
+//@version=4
+
+strategy("Expansion Pivot", overlay=true)
+
+start = timestamp(2000,1,1,0,0)
+end = timestamp(2022,1,1,0,0)
+
+[macdLine, signalLine, histLine] = macd(close, 12, 26, 9)
+ma50 = sma(close,50)
+ma200 = sma(close,200)
+rsi2 = rsi(close,2)
+highest_change = highest(high-low, 9)
+change = high - low
+
+enterLong = change == highest_change and open < ma50 and close > ma50 and ma50 > ma200
+exitLong = rsi2 > 95
+if time > start and time < end 
+    strategy.entry("Long", strategy.long, when = enterLong)
+    strategy.close("Long", when = exitLong)

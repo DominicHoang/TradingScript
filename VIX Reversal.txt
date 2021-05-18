@@ -1,0 +1,33 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © DominicHoang
+
+//@version=4
+strategy("VIX Reversal", overlay=true)
+
+start = timestamp(1975,1,1,0,0)
+end = timestamp(2022,1,1,0,0)
+ma5 = sma(close,5)
+ma15 = sma(close,15)
+ma200 = sma(close, 200)
+rsi2 = rsi(close,2)
+
+
+//Fetch VIX data
+vixData = security("CBOE:VIX", "D", close)
+vixSMA = sma(vixData, 10)
+
+
+enterLong = vixData > vixSMA and vixData[1] > vixSMA[1] and vixData[2] > vixSMA[2] and close > ma200
+
+exitLong =  close > ma5
+
+if time > start and time < end 
+    strategy.entry("Long", strategy.long, when = enterLong)
+    strategy.close("Long", when = exitLong)
+
+
+
+
+
+
+

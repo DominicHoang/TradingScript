@@ -1,0 +1,20 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © DominicHoang
+
+//@version=4
+strategy("Double 7 ", overlay=true)
+start = timestamp(2016,1,1,0,0)
+end = timestamp(2022,1,1,0,0)
+
+ma5 = sma(close, 5)
+ma200 = sma(close, 200)
+var low_6_day = low[6]
+for i = 6 to 2  
+    if low[i-1] < low[i]
+        low_6_day := low[i-1]
+        
+if time >= start and time <= end
+    strategy.entry("Long", strategy.long, when = low < low_6_day and open > ma200)
+    strategy.close("Long", when = close > ma5)
+
+//Strategy này nên được dùng ở những stock đang bull ( bởi vì muốn go long)
